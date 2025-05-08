@@ -1,0 +1,12 @@
+# Allow all web crawlers
+User-agent: *
+Allow: /
+
+# Disallow admin pages
+Disallow: /admin/
+Disallow: /dashboard/login
+Disallow: /dashboard/profile
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://apollolisting.com/sitemap.xml 
