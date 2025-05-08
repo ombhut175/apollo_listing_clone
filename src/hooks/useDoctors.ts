@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import { getRequest, handleError } from '@/helpers/ui/handlers';
-import { PageFilteringConstants } from '@/helpers/string_const';
+import { ApiRoutesConstants, PageFilteringConstants } from '@/helpers/string_const';
 
 export type FilterParams = {
   [PageFilteringConstants.PAGE]?: number;
@@ -66,7 +66,6 @@ const fetcher = async (url: string) => {
   } catch (error) {
     console.error("Error fetching doctors:", error);
     handleError(error);
-    throw error;
   }
 };
 
@@ -82,7 +81,7 @@ export const useDoctors = (filters: FilterParams = {}) => {
   const queryString = queryParams.toString();
 
   console.log("::: URL ::: ");
-  const apiUrl = `/api/doctor${queryString ? `?${queryString}` : ''}`;
+  const apiUrl = `${ApiRoutesConstants.DOCTOR}${queryString ? `?${queryString}` : ''}`;
   console.log(apiUrl);
   
   const { data, error, isLoading, mutate } = useSWR<ApiResponse>(apiUrl, fetcher);

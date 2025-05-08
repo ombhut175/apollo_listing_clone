@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PageFilteringConstants } from "@/helpers/string_const";
 import { FilterParams } from "@/hooks/useDoctors";
 
@@ -40,22 +40,76 @@ export default function Filters({ activeFilters, setActiveFilters }: FiltersProp
     ? filterOptions[PageFilteringConstants.EXPERIENCE] 
     : filterOptions[PageFilteringConstants.EXPERIENCE].slice(0, 3);
 
+  // Initialize default filters when component mounts
+  useEffect(() => {
+    // If no facility filter is set yet, initialize with default checked options
+    if (!activeFilters[PageFilteringConstants.FACILITY]) {
+      const defaultFacilities = filterOptions[PageFilteringConstants.FACILITY]
+        .filter(option => option.defaultChecked)
+        .map(option => option.id)
+        .join(',');
+      
+      if (defaultFacilities) {
+        setActiveFilters({
+          ...activeFilters,
+          [PageFilteringConstants.FACILITY]: defaultFacilities
+        });
+      }
+    }
+  }, [activeFilters, setActiveFilters]);
+
   const handleFilterChange = (filterType: string, value: string, isChecked: boolean) => {
-    if (isChecked) {
-      // Add the filter while preserving page and limit
-      setActiveFilters({
-        ...activeFilters,
-        [PageFilteringConstants.PAGE]: 1, // Reset to page 1 when filter changes
-        [filterType]: value
-      });
+    // Special handling for FACILITY since it can have multiple values
+    if (filterType === PageFilteringConstants.FACILITY) {
+      const currentValue = activeFilters[PageFilteringConstants.FACILITY] || "";
+      const values = currentValue ? currentValue.split(',') : [];
+      
+      if (isChecked && !values.includes(value)) {
+        // Add value to comma-separated list
+        const newValues = [...values, value].join(',');
+        setActiveFilters({
+          ...activeFilters,
+          [PageFilteringConstants.PAGE]: 1, // Reset to page 1 when filter changes
+          [PageFilteringConstants.FACILITY]: newValues
+        });
+      } else if (!isChecked && values.includes(value)) {
+        // Remove value from comma-separated list
+        const newValues = values.filter(v => v !== value).join(',');
+        
+        if (newValues) {
+          setActiveFilters({
+            ...activeFilters,
+            [PageFilteringConstants.PAGE]: 1, // Reset to page 1 when filter changes
+            [PageFilteringConstants.FACILITY]: newValues
+          });
+        } else {
+          // If no values left, remove the filter
+          const newFilters = { ...activeFilters };
+          delete newFilters[PageFilteringConstants.FACILITY];
+          setActiveFilters({
+            ...newFilters,
+            [PageFilteringConstants.PAGE]: 1 // Reset to page 1 when filter changes
+          });
+        }
+      }
     } else {
-      // Remove the filter while preserving page and limit
-      const newFilters = { ...activeFilters };
-      delete newFilters[filterType as keyof FilterParams];
-      setActiveFilters({
-        ...newFilters,
-        [PageFilteringConstants.PAGE]: 1 // Reset to page 1 when filter changes
-      });
+      // Original handling for other filter types
+      if (isChecked) {
+        // Add the filter while preserving page and limit
+        setActiveFilters({
+          ...activeFilters,
+          [PageFilteringConstants.PAGE]: 1, // Reset to page 1 when filter changes
+          [filterType]: value
+        });
+      } else {
+        // Remove the filter while preserving page and limit
+        const newFilters = { ...activeFilters };
+        delete newFilters[filterType as keyof FilterParams];
+        setActiveFilters({
+          ...newFilters,
+          [PageFilteringConstants.PAGE]: 1 // Reset to page 1 when filter changes
+        });
+      }
     }
     
     console.log(`Filter ${filterType} changed to ${isChecked ? value : 'none'}`);
@@ -70,6 +124,13 @@ export default function Filters({ activeFilters, setActiveFilters }: FiltersProp
   };
 
   const isFilterActive = (filterType: string, value: string) => {
+    // Special handling for FACILITY since it can have multiple values
+    if (filterType === PageFilteringConstants.FACILITY) {
+      const currentValue = activeFilters[PageFilteringConstants.FACILITY] || "";
+      return currentValue.split(',').includes(value);
+    }
+    
+    // Original handling for other filter types
     return activeFilters[filterType as keyof FilterParams] === value;
   };
 
@@ -100,7 +161,6 @@ export default function Filters({ activeFilters, setActiveFilters }: FiltersProp
               <input 
                 type="checkbox" 
                 className="form-checkbox text-teal-600 rounded mr-3 h-5 w-5 transition duration-150 ease-in-out" 
-                defaultChecked={option.defaultChecked} 
                 checked={isFilterActive(PageFilteringConstants.FACILITY, option.id)}
                 onChange={(e) => handleFilterChange(PageFilteringConstants.FACILITY, option.id, e.target.checked)}
               />

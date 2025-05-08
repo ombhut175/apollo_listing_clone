@@ -28,3 +28,6 @@ export enum PageFilteringConstants {
     FACILITY = 'facility',
 }
 
+export enum ApiRoutesConstants {
+    DOCTOR = '/api/doctor',
+}

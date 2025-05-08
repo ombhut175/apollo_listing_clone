@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { Search, MapPin, ChevronDown } from "lucide-react";
+import QuickToastTest from "./QuickToastTest";
 
 export default function Header() {
   return (
     <>
       {/* Header */}
-      <header className="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-sm">
+      <header className="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-sm relative">
         <div className="container mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center w-full md:w-auto justify-between md:justify-start">
             <div className="font-bold text-2xl text-teal-600">Apollo 24/7</div>
@@ -35,6 +36,11 @@ export default function Header() {
           <button className="bg-teal-600 text-white px-6 py-3 rounded-lg hover:bg-teal-700 transition-colors w-full md:w-auto font-medium shadow-sm">
             Login / Sign Up
           </button>
+        </div>
+        
+        {/* Quick toast test positioned inside header */}
+        <div className="absolute top-2 right-2 z-50 md:top-4 md:right-4">
+          <QuickToastTest position="top-right" size="sm" />
         </div>
       </header>
 

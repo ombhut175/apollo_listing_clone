@@ -73,14 +73,28 @@ export async function GET(request: Request) {
       // Use MongoDB $in operator to search within the language array
       const languageValue = searchParams.get(PageFilteringConstants.LANGUAGE);
       console.log("Language filter:", languageValue);
-      filter.language = languageValue;
+      
+      // Split comma-separated values and use $in operator
+      if (languageValue?.includes(',')) {
+        const languages = languageValue.split(',');
+        filter.language = { $in: languages };
+      } else {
+        filter.language = languageValue;
+      }
     }
     
     if (searchParams.has(PageFilteringConstants.FACILITY)) {
       // Use MongoDB $in operator to search within the facility array
       const facilityValue = searchParams.get(PageFilteringConstants.FACILITY);
       console.log("Facility filter:", facilityValue);
-      filter.facility = facilityValue;
+      
+      // Split comma-separated values and use $in operator
+      if (facilityValue?.includes(',')) {
+        const facilities = facilityValue.split(',');
+        filter.facility = { $in: facilities };
+      } else {
+        filter.facility = facilityValue;
+      }
     }
     
     console.log("Applied filters:", filter);
