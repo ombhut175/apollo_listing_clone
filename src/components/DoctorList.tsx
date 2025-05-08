@@ -1,17 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowUp, ArrowLeft, ArrowRight, X } from "lucide-react";
 import DoctorCard from "./DoctorCard";
 import HelpCard from "./HelpCard";
 import { useDoctors, FilterParams } from "@/hooks/useDoctors";
-import useAddDoctor, { DoctorSubmission } from "@/hooks/useAddDoctor";
+import { useAddDoctor, DoctorSubmission } from "@/hooks/useAddDoctor";
 import Filters from "./Filters";
 import { PageFilteringConstants } from "@/helpers/string_const";
 import FloatingAddButton from "./FloatingAddButton";
-import { toastSuccess, toastInfo } from "@/utils/toast";
-import { withToastTester } from "./ToastTester";
+import { toast } from "react-toastify";
+import Loading from "./Loading";
+import RichDoctorListing from "./RichDoctorListing";
+import React from "react";
 
 function DoctorList() {
   const [activeFilters, setActiveFilters] = useState<FilterParams>({
@@ -40,13 +42,13 @@ function DoctorList() {
       [PageFilteringConstants.PAGE]: newPage
     }));
     // Add toast notification
-    toastInfo(`Loading page ${newPage}`);
+    toast.info(`Loading page ${newPage}`);
   };
 
   const handleSortChange = (sortBy: string) => {
     // In a real implementation, this would update sort params
     console.log(`Sorting by: ${sortBy}`);
-    toastInfo(`Sorting by: ${sortBy}`);
+    toast.info(`Sorting by: ${sortBy}`);
   };
 
   // Helper function to clear all filters
@@ -56,7 +58,7 @@ function DoctorList() {
       [PageFilteringConstants.LIMIT]: 6
     });
     // Add toast notification
-    toastSuccess('All filters have been cleared');
+    toast.success('All filters have been cleared');
   };
   
   // Make sure newDoctor state is initialized with dummyDoctor
@@ -88,7 +90,7 @@ function DoctorList() {
   const openAddForm = () => {
     setNewDoctor(dummyDoctor);
     setShowAddForm(true);
-    toastInfo('Add new doctor form opened');
+    toast.info('Add new doctor form opened');
   };
   
   // For direct input change handling
@@ -226,7 +228,7 @@ function DoctorList() {
                            Math.abs(page - pagination.page) <= 1;
                   })
                   .map((page, index, filteredPages) => (
-                    <>
+                    <React.Fragment key={`page-${page}`}>
                       {index > 0 && filteredPages[index - 1] !== page - 1 && (
                         <span key={`ellipsis-${page}`} className="flex items-center px-3 py-1 bg-gray-100 rounded">
                           ...
@@ -243,7 +245,7 @@ function DoctorList() {
                       >
                         {page}
                       </button>
-                    </>
+                    </React.Fragment>
                   ))
                 }
                 
@@ -623,7 +625,4 @@ function DoctorList() {
   );
 }
 
-export default withToastTester(DoctorList, {
-  buttonClassName: "px-2 py-1 text-xs font-medium text-white rounded",
-  showLabel: false
-}); 
+export default DoctorList; 

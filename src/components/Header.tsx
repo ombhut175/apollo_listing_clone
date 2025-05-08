@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Search, MapPin, ChevronDown } from "lucide-react";
-import QuickToastTest from "./QuickToastTest";
+// import QuickToastTest from "./QuickToastTest";
 
 export default function Header() {
   return (
@@ -38,10 +38,10 @@ export default function Header() {
           </button>
         </div>
         
-        {/* Quick toast test positioned inside header */}
-        <div className="absolute top-2 right-2 z-50 md:top-4 md:right-4">
+        {/* Quick toast test positioned inside header - commented out */}
+        {/* <div className="absolute top-2 right-2 z-50 md:top-4 md:right-4">
           <QuickToastTest position="top-right" size="sm" />
-        </div>
+        </div> */}
       </header>
 
       {/* Navigation */}
