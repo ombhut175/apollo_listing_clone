@@ -22,5 +22,9 @@ export enum DoctorConstants {
 export enum PageFilteringConstants {
     PAGE = 'page',
     LIMIT = 'limit',
+    EXPERIENCE = 'experience',
+    FEES = 'fees',
+    LANGUAGE = 'language',
+    FACILITY = 'facility',
 }
 

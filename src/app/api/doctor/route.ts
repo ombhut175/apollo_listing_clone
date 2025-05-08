@@ -7,6 +7,7 @@ import {
   responseSuccessfulWithData,
 } from "@/helpers/responseHelpers";
 import { dbConnect } from "@/lib/dbConnect";
+import { PageFilteringConstants } from "@/helpers/string_const";
 
 
 export async function GET(request: Request) {
@@ -14,6 +15,59 @@ export async function GET(request: Request) {
 
   try {
     const { searchParams } = new URL(request.url);
+    
+    // Get pagination parameters
+    const page = searchParams.get(PageFilteringConstants.PAGE) ? 
+      parseInt(searchParams.get(PageFilteringConstants.PAGE) as string, 10) : 1;
+      
+    const limit = searchParams.get(PageFilteringConstants.LIMIT) ? 
+      parseInt(searchParams.get(PageFilteringConstants.LIMIT) as string, 10) : 6;
+    
+    // Calculate pagination values
+    const skip = (page - 1) * limit;
+    
+    // Build filter object
+    const filter: any = {};
+    
+    // Add filters if they exist in query params
+    if (searchParams.has(PageFilteringConstants.EXPERIENCE)) {
+      filter.experience = searchParams.get(PageFilteringConstants.EXPERIENCE);
+    }
+    
+    if (searchParams.has(PageFilteringConstants.FEES)) {
+      filter.fees = searchParams.get(PageFilteringConstants.FEES);
+    }
+    
+    if (searchParams.has(PageFilteringConstants.LANGUAGE)) {
+      // Partial match for language using regex
+      filter.language = { $regex: searchParams.get(PageFilteringConstants.LANGUAGE), $options: 'i' };
+    }
+    
+    if (searchParams.has(PageFilteringConstants.FACILITY)) {
+      // Partial match for facility using regex
+      filter.facility = { $regex: searchParams.get(PageFilteringConstants.FACILITY), $options: 'i' };
+    }
+    
+    // Execute query with pagination and filters
+    const doctors = await DoctorModel.find(filter)
+      .skip(skip)
+      .limit(limit);
+    
+    // Get total count for pagination metadata
+    const total = await DoctorModel.countDocuments(filter);
+    
+    return responseSuccessfulWithData({
+      message: "Doctors retrieved successfully",
+      body: {
+        doctors,
+        pagination: {
+          total,
+          page,
+          limit,
+          pages: Math.ceil(total / limit)
+        }
+      }
+    });
   } catch (error: any) {
     return responseInternalServerError(error.message || "Internal server error");
   }
