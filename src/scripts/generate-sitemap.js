@@ -9,33 +9,52 @@ function generateSitemap() {
   // In a real-world scenario, this data would come from your database or API
   const pages = [
     { url: '/', changefreq: 'daily', priority: 1.0 },
-    { url: '/listings', changefreq: 'daily', priority: 0.9 },
+    { url: '/doctors', changefreq: 'daily', priority: 0.9 },
+    { url: '/specialties', changefreq: 'weekly', priority: 0.8 },
     { url: '/about', changefreq: 'monthly', priority: 0.7 },
     { url: '/contact', changefreq: 'monthly', priority: 0.7 },
     { url: '/blog', changefreq: 'weekly', priority: 0.8 },
   ];
 
-  // Simulate property listings
-  const listings = [
-    { id: '1', slug: 'modern-apartment-downtown' },
-    { id: '2', slug: 'luxury-villa-beachfront' },
-    { id: '3', slug: 'cozy-suburban-home' },
+  // Simulate doctor listings
+  const doctors = [
+    { id: '1', slug: 'dr-john-smith-cardiologist' },
+    { id: '2', slug: 'dr-sarah-johnson-pediatrician' },
+    { id: '3', slug: 'dr-michael-chen-neurologist' },
   ];
 
-  // Add each listing to the sitemap
-  listings.forEach(listing => {
+  // Add each doctor to the sitemap
+  doctors.forEach(doctor => {
     pages.push({
-      url: `/listing/${listing.slug}`,
+      url: `/doctor/${doctor.slug}`,
       changefreq: 'weekly',
       priority: 0.8,
     });
   });
 
+  // Simulate specialties
+  const specialties = [
+    { id: '1', slug: 'cardiology' },
+    { id: '2', slug: 'pediatrics' },
+    { id: '3', slug: 'neurology' },
+    { id: '4', slug: 'dermatology' },
+    { id: '5', slug: 'orthopedics' },
+  ];
+
+  // Add each specialty to the sitemap
+  specialties.forEach(specialty => {
+    pages.push({
+      url: `/specialty/${specialty.slug}`,
+      changefreq: 'weekly',
+      priority: 0.7,
+    });
+  });
+
   // Simulate blog posts
   const blogPosts = [
-    { id: '1', slug: 'top-10-property-investment-tips' },
-    { id: '2', slug: 'how-to-stage-your-home-for-selling' },
-    { id: '3', slug: 'real-estate-market-trends-2023' },
+    { id: '1', slug: 'choosing-the-right-primary-care-physician' },
+    { id: '2', slug: 'understanding-medical-insurance-coverage' },
+    { id: '3', slug: 'healthcare-trends-2023' },
   ];
 
   // Add each blog post to the sitemap

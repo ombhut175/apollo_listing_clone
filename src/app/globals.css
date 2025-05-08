@@ -85,3 +85,81 @@ body {
     justify-content: center;
   }
 }
+
+/* Doctor Listing Styles */
+.doctor-listing {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  background-color: #f8f9fa;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.doctor-details h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #0d47a1;
+  margin-bottom: 0.5rem;
+}
+
+.doctor-specialties {
+  font-size: 1.1rem;
+  color: #455a64;
+  margin-bottom: 1rem;
+}
+
+.doctor-address {
+  font-size: 0.95rem;
+  color: #455a64;
+  margin-bottom: 1rem;
+}
+
+.doctor-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.doctor-status {
+  margin-bottom: 1.5rem;
+}
+
+.accepting-patients {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.not-accepting-patients {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.doctor-education, .doctor-services, .doctor-description {
+  margin-bottom: 1.5rem;
+}
+
+.doctor-education h3, .doctor-services h3, .doctor-description h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #263238;
+  margin-bottom: 0.75rem;
+}
+
+.doctor-education ul, .doctor-services ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+
+.doctor-education li, .doctor-services li {
+  margin-bottom: 0.5rem;
+}

@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
-import { OrganizationStructuredData } from "../components/StructuredData";
+import { MedicalOrganizationStructuredData } from "../components/StructuredData";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -49,7 +49,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <OrganizationStructuredData />
+        <MedicalOrganizationStructuredData />
       </head>
       <body className={inter.className}>
         {children}

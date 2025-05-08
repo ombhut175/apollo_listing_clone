@@ -14,7 +14,7 @@ interface OrganizationStructuredDataProps {
 export const OrganizationStructuredData: React.FC<OrganizationStructuredDataProps> = ({
   url = "https://apollolisting.com",
   logo = "https://apollolisting.com/logo.png",
-  name = "Apollo Listing",
+  name = "Apollo Listing - Healthcare Directory",
   contactPoint = {
     telephone: "+1-800-555-1234",
     contactType: "customer service"
@@ -34,6 +34,123 @@ export const OrganizationStructuredData: React.FC<OrganizationStructuredDataProp
     name,
     contactPoint,
     sameAs
+  };
+  
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+    />
+  );
+};
+
+interface MedicalOrganizationStructuredDataProps {
+  name?: string;
+  image?: string[];
+  address?: {
+    streetAddress: string;
+    addressLocality: string;
+    addressRegion: string;
+    postalCode: string;
+    addressCountry: string;
+  };
+  geo?: {
+    latitude: number;
+    longitude: number;
+  };
+  telephone?: string;
+  url?: string;
+  medicalSpecialty?: string[];
+}
+
+export const MedicalOrganizationStructuredData: React.FC<MedicalOrganizationStructuredDataProps> = ({
+  name = "Apollo Listing Medical Directory",
+  image = ["https://apollolisting.com/office-image.jpg"],
+  address = {
+    streetAddress: "123 Medical Plaza",
+    addressLocality: "Cityville",
+    addressRegion: "State",
+    postalCode: "12345",
+    addressCountry: "US"
+  },
+  geo = {
+    latitude: 40.7128,
+    longitude: -74.0060
+  },
+  telephone = "+1-800-555-1234",
+  url = "https://apollolisting.com",
+  medicalSpecialty = ["Primary Care", "Cardiology", "Neurology", "Pediatrics"]
+}) => {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "MedicalOrganization",
+    name,
+    image,
+    address: {
+      "@type": "PostalAddress",
+      ...address
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      ...geo
+    },
+    telephone,
+    url,
+    medicalSpecialty
+  };
+  
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+    />
+  );
+};
+
+interface DoctorListingStructuredDataProps {
+  name: string;
+  description: string;
+  image: string[];
+  medicalSpecialty: string[];
+  address: {
+    streetAddress: string;
+    addressLocality: string;
+    addressRegion: string;
+    postalCode: string;
+    addressCountry: string;
+  };
+  telephone: string;
+  email?: string;
+  availableService?: string[];
+  url: string;
+}
+
+export const DoctorListingStructuredData: React.FC<DoctorListingStructuredDataProps> = ({
+  name,
+  description,
+  image,
+  medicalSpecialty,
+  address,
+  telephone,
+  email,
+  availableService,
+  url
+}) => {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Physician",
+    name,
+    description,
+    image,
+    medicalSpecialty,
+    address: {
+      "@type": "PostalAddress",
+      ...address
+    },
+    telephone,
+    email,
+    availableService,
+    url
   };
   
   return (
