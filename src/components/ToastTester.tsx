@@ -65,7 +65,7 @@ export const ToastTester: React.FC<ToastTesterProps> = ({
  * HOC (Higher-Order Component) to add toast testing capability to any component
  * @param Component The component to enhance with toast testing
  */
-export function withToastTester<P>(
+export function withToastTester<P extends object>(
   Component: React.ComponentType<P>,
   testerProps?: ToastTesterProps
 ) {
