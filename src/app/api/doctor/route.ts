@@ -32,31 +32,66 @@ export async function GET(request: Request) {
     
     // Add filters if they exist in query params
     if (searchParams.has(PageFilteringConstants.EXPERIENCE)) {
-      filter.experience = searchParams.get(PageFilteringConstants.EXPERIENCE);
+      const experienceValue = searchParams.get(PageFilteringConstants.EXPERIENCE);
+      console.log("Experience filter:", experienceValue);
+      
+      // Handle experience ranges like "0-5", "6-10", "11-16", "17+"
+      if (experienceValue?.includes('-')) {
+        const [min, max] = experienceValue.split('-').map(val => parseInt(val, 10));
+        filter.experience = { $gte: min };
+        if (!isNaN(max)) {
+          filter.experience.$lte = max;
+        }
+      } else if (experienceValue?.includes('+')) {
+        const min = parseInt(experienceValue.replace('+', ''), 10);
+        filter.experience = { $gte: min };
+      } else {
+        filter.experience = parseInt(experienceValue as string, 10);
+      }
     }
     
     if (searchParams.has(PageFilteringConstants.FEES)) {
-      filter.fees = searchParams.get(PageFilteringConstants.FEES);
+      const feesValue = searchParams.get(PageFilteringConstants.FEES);
+      console.log("Fees filter:", feesValue);
+      
+      // Handle fee ranges like "100-500", "500-1000", "1000+"
+      if (feesValue?.includes('-')) {
+        const [min, max] = feesValue.split('-').map(val => parseInt(val, 10));
+        filter.fees = { $gte: min };
+        if (!isNaN(max)) {
+          filter.fees.$lte = max;
+        }
+      } else if (feesValue?.includes('+')) {
+        const min = parseInt(feesValue.replace('+', ''), 10);
+        filter.fees = { $gte: min };
+      } else {
+        filter.fees = parseInt(feesValue as string, 10);
+      }
     }
     
     if (searchParams.has(PageFilteringConstants.LANGUAGE)) {
-      // Partial match for language using regex
-      filter.language = { $regex: searchParams.get(PageFilteringConstants.LANGUAGE), $options: 'i' };
+      // Use MongoDB $in operator to search within the language array
+      const languageValue = searchParams.get(PageFilteringConstants.LANGUAGE);
+      console.log("Language filter:", languageValue);
+      filter.language = languageValue;
     }
     
     if (searchParams.has(PageFilteringConstants.FACILITY)) {
-      // Partial match for facility using regex
-      filter.facility = { $regex: searchParams.get(PageFilteringConstants.FACILITY), $options: 'i' };
+      // Use MongoDB $in operator to search within the facility array
+      const facilityValue = searchParams.get(PageFilteringConstants.FACILITY);
+      console.log("Facility filter:", facilityValue);
+      filter.facility = facilityValue;
     }
+    
+    console.log("Applied filters:", filter);
     
     // Execute query with pagination and filters
     const doctors = await DoctorModel.find(filter)
       .skip(skip)
       .limit(limit);
     
-
-      console.log("::: doctors ::: ");
-      console.log(doctors);
+    console.log("::: doctors ::: ");
+    console.log(doctors);
       
     // Get total count for pagination metadata
     const total = await DoctorModel.countDocuments(filter);

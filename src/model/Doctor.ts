@@ -15,10 +15,12 @@ export interface DoctorInterface extends Document {
   onlineWaitTimeMinutes: number;
   clinicType: string;
   availabilityStatus: string;
-  experience: string;
-  fees: string;
-  language: string;
-  facility: string;
+  experience: number;
+  fees: number;
+  language: string[];
+  facility: string[];
+  rating?: number;
+  reviewCount?: number;
 }
 
 const DoctorSchema: Schema<DoctorInterface> = new mongoose.Schema({
@@ -35,10 +37,12 @@ const DoctorSchema: Schema<DoctorInterface> = new mongoose.Schema({
   onlineWaitTimeMinutes: { type: Number, required: false },
   clinicType: { type: String, required: true },
   availabilityStatus: { type: String, required: false },
-  experience: { type: String, required: true },
-  fees: { type: String, required: true },
-  language: { type: String, required: true },
-  facility: { type: String, required: true },
+  experience: { type: Number, required: true },
+  fees: { type: Number, required: true },
+  language: { type: [String], required: true },
+  facility: { type: [String], required: true },
+  rating: { type: Number, required: false },
+  reviewCount: { type: Number, required: false }
 });
 
 const DoctorModel =

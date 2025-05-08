@@ -20,6 +20,7 @@ export default function DoctorList() {
   
   console.log("::: doctors ::: ", doctors);
   console.log("::: pagination ::: ", pagination);
+  console.log("::: activeFilters ::: ", activeFilters);
 
   const handlePageChange = (newPage: number) => {
     setActiveFilters(prev => ({
@@ -107,7 +108,11 @@ export default function DoctorList() {
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {doctors.map((doctor) => (
-                  <DoctorCard key={doctor.id} {...doctor} />
+                  <DoctorCard 
+                    key={doctor.id || doctor._id?.toString()} 
+                    {...doctor} 
+                    experience={typeof doctor.experience === 'string' ? parseInt(doctor.experience, 10) : doctor.experience}
+                  />
                 ))}
               </div>
             )}

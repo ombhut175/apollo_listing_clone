@@ -2,17 +2,25 @@
 
 type DoctorCardProps = {
   name: string;
-  specialty: string;
-  image?: string; // Made optional since we're not using it anymore
-  experience: string;
-  qualifications: string;
-  location: string;
-  rating: number;
-  reviewCount: number;
-  price: number;
+  specialty?: string;
+  specialization?: string; // Added for MongoDB schema compatibility
+  image?: string;
+  experience: number; // Changed from string to number
+  qualifications?: string;
+  degree?: string; // Added for MongoDB schema compatibility
+  location?: string;
+  city?: string; // Added for MongoDB schema compatibility
+  state?: string; // Added for MongoDB schema compatibility
+  rating?: number;
+  reviewCount?: number;
+  price?: number;
+  consultationFee?: number; // Added for MongoDB schema compatibility
   cashback?: number;
+  cashbackAmount?: number; // Added for MongoDB schema compatibility
   isHourDoctor?: boolean;
   availableIn?: string;
+  language?: string[]; // Added language array
+  facility?: string[]; // Added facility array
 };
 
 // Function to generate a consistent color based on name
@@ -42,21 +50,41 @@ const getColorFromName = (name: string): string => {
 export default function DoctorCard({
   name,
   specialty,
+  specialization, // New prop
   experience,
   qualifications,
+  degree, // New prop
   location,
-  rating,
-  reviewCount,
+  city, // New prop
+  state, // New prop
+  rating = 4.5, // Default value
+  reviewCount = 100, // Default value
   price,
+  consultationFee, // New prop
   cashback,
+  cashbackAmount, // New prop
   isHourDoctor,
   availableIn,
+  language,
+  facility
 }: DoctorCardProps) {
   // Get the first letter of the name
   const firstLetter = name.charAt(0);
   
   // Get a color based on the name
   const bgColor = getColorFromName(name);
+
+  // Normalize props to handle different data sources
+  const displaySpecialty = specialty || specialization || "General Physician";
+  const displayQualifications = qualifications || degree || "MBBS";
+  const displayLocation = location || (city && state ? `${city}, ${state}` : city || state || "");
+  const displayPrice = price || consultationFee || 0;
+  const displayCashback = cashback || cashbackAmount || 0;
+
+  // Format experience
+  const displayExperience = typeof experience === 'number' 
+    ? `${experience} years experience` 
+    : experience;
   
   return (
     <div className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow hover:shadow-md transition-shadow">
@@ -75,7 +103,7 @@ export default function DoctorCard({
               </div>
             )}
           </div>
-          <p className="text-gray-600 mb-2">{specialty}</p>
+          <p className="text-gray-600 mb-2">{displaySpecialty}</p>
           
           <div className="flex items-center mb-2 text-amber-500">
             {[...Array(5)].map((_, i) => (
@@ -91,11 +119,19 @@ export default function DoctorCard({
           </div>
           
           <div className="flex items-center mb-2 flex-wrap gap-2">
-            <span className="bg-gray-100 text-gray-700 font-medium text-xs px-2 py-1 rounded">{experience}</span>
+            <span className="bg-gray-100 text-gray-700 font-medium text-xs px-2 py-1 rounded">{displayExperience}</span>
             <span className="mx-1">•</span>
-            <span className="bg-gray-100 text-gray-700 font-medium text-xs px-2 py-1 rounded">{qualifications}</span>
+            <span className="bg-gray-100 text-gray-700 font-medium text-xs px-2 py-1 rounded">{displayQualifications}</span>
+            {language && language.length > 0 && (
+              <>
+                <span className="mx-1">•</span>
+                <span className="bg-gray-100 text-gray-700 font-medium text-xs px-2 py-1 rounded">
+                  {language.slice(0, 2).join(', ')}{language.length > 2 ? '...' : ''}
+                </span>
+              </>
+            )}
           </div>
-          {location && <p className="text-gray-500 text-sm">{location}</p>}
+          {displayLocation && <p className="text-gray-500 text-sm">{displayLocation}</p>}
         </div>
         <div className="hidden sm:flex flex-col items-end justify-between gap-3">
           {isHourDoctor && (
@@ -104,11 +140,11 @@ export default function DoctorCard({
             </div>
           )}
           <div className="flex items-center">
-            <div className="text-2xl font-bold text-gray-800 mr-2">₹{price}</div>
-            {cashback && (
+            <div className="text-2xl font-bold text-gray-800 mr-2">₹{displayPrice}</div>
+            {displayCashback > 0 && (
               <div className="bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded flex items-center">
                 <span className="w-3 h-3 bg-amber-500 rounded-full mr-1"></span>
-                ₹{cashback} Cashback
+                ₹{displayCashback} Cashback
               </div>
             )}
           </div>
@@ -122,11 +158,11 @@ export default function DoctorCard({
       {/* Mobile-only bottom section */}
       <div className="sm:hidden flex items-center justify-between p-4 border-t border-gray-200 bg-gray-50">
         <div className="flex items-center">
-          <div className="text-2xl font-bold text-gray-800 mr-2">₹{price}</div>
-          {cashback && (
+          <div className="text-2xl font-bold text-gray-800 mr-2">₹{displayPrice}</div>
+          {displayCashback > 0 && (
             <div className="bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded flex items-center">
               <span className="w-3 h-3 bg-amber-500 rounded-full mr-1"></span>
-              ₹{cashback} Cashback
+              ₹{displayCashback} Cashback
             </div>
           )}
         </div>

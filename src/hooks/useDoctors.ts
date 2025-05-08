@@ -12,18 +12,27 @@ export type FilterParams = {
 };
 
 export interface Doctor {
-  id: string;
+  id?: string;
+  _id?: string;
   name: string;
-  specialty: string;
-  experience: string;
-  qualifications: string;
-  location: string;
+  specialty?: string;
+  specialization?: string;
+  experience: number | string;
+  qualifications?: string;
+  degree?: string;
+  location?: string;
+  city?: string;
+  state?: string;
   rating: number;
   reviewCount: number;
-  price: number;
+  price?: number;
+  consultationFee?: number;
   cashback?: number;
+  cashbackAmount?: number;
   isHourDoctor?: boolean;
   availableIn?: string;
+  language?: string[];
+  facility?: string[];
 }
 
 export interface ApiResponse {
