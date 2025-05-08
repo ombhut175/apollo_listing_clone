@@ -1,15 +1,11 @@
-import useHydration from "../hooks/useHydration";
-import LoadingSpinner from "./LoadingSpinner";
+import Loading from './Loading';
+import useHydration from '../hooks/useHydration';
 
 export default function Testing() {
-    const isMounted = useHydration();
+    const isHydrating = useHydration();
 
-    if(!isMounted) {
-        return (
-            <div>
-                <LoadingSpinner text="Loading Test Component" />
-            </div>
-        );
+    if(isHydrating) {
+        return <Loading />;
     }
     
     return (

@@ -1,7 +1,13 @@
+"use client";
+
+import Header from "@/components/Header";
+import DoctorList from "@/components/DoctorList";
+
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-4xl font-bold">Welcome to Next.js</h1>
-    </main>
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      <DoctorList />
+    </div>
   );
 }

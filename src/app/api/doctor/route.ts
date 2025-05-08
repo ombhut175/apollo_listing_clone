@@ -13,6 +13,7 @@ import { PageFilteringConstants } from "@/helpers/string_const";
 export async function GET(request: Request) {
   await dbConnect();
 
+  console.log("::: GET request ::: ");
   try {
     const { searchParams } = new URL(request.url);
     
@@ -53,6 +54,10 @@ export async function GET(request: Request) {
       .skip(skip)
       .limit(limit);
     
+
+      console.log("::: doctors ::: ");
+      console.log(doctors);
+      
     // Get total count for pagination metadata
     const total = await DoctorModel.countDocuments(filter);
     

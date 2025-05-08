@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 
 /**
- * Hook to safely handle hydration in components with client-side only features
- * Returns true when the component is in browser and hydration is complete
+ * Hook to handle hydration state for components 
+ * Prevents hydration errors by indicating when client-side hydration is complete
+ * @returns {boolean} - Returns false when component is hydrated (client-side)
  */
 export default function useHydration() {
-  const [isMounted, setIsMounted] = useState(false);
-
+  const [isHydrating, setIsHydrating] = useState(true);
+  
   useEffect(() => {
-    setIsMounted(true);
+    // This effect runs only on client-side after hydration
+    setIsHydrating(false);
   }, []);
-
-  return isMounted;
+  
+  return isHydrating;
 } 
