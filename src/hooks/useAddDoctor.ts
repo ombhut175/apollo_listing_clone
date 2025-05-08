@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import useSWRMutation from 'swr/mutation';
 import { Doctor } from './useDoctors';
-import { DoctorConstants } from '@/helpers/string_const';
+import { DoctorConstants, ApiRoutesConstants } from '@/helpers/string_const';
 import { toastSuccess, toastError } from '@/utils/toast';
 
 // Create a type for the doctor submission data
@@ -74,7 +74,7 @@ export const useAddDoctor = () => {
     error, 
     data, 
     reset 
-  } = useSWRMutation('/api/doctor', addDoctorFetcher);
+  } = useSWRMutation(ApiRoutesConstants.DOCTOR, addDoctorFetcher);
   
   /**
    * Function to add a new doctor
